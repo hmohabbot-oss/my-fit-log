@@ -6,8 +6,8 @@ FitLog is a modern, responsive web application designed for gym-goers and fitnes
 
 ## 🔗 Links
 
-- **Live URL:** [Insert Live Link Here]
-- **GitHub Repository:** [Insert Repository Link Here]
+- **Live URL:** [https://my-fit-log-bay.vercel.app/]
+- **GitHub Repository:** [https://github.com/hmohabbot-oss/my-fit-log.git]
 
 ---
 
