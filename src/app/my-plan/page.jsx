@@ -23,14 +23,27 @@ export default function MyPlanPage() {
 
   // ডায়নামিক স্ট্যাটাস মেট্রিক্স ক্যালকুলেশন
   const totalExercises = currentList.length;
-  const totalMinutes = currentList.reduce((acc, curr) => acc + (Number(curr.duration) || 0), 0);
-  const totalCalories = currentList.reduce((acc, curr) => acc + (Number(curr.calories) || 0), 0);
+  const totalMinutes = currentList.reduce(
+    (acc, curr) => acc + (Number(curr.duration) || 0),
+    0
+  );
+  const totalCalories = currentList.reduce(
+    (acc, curr) => acc + (Number(curr.caloriesBurned ?? curr.calories) || 0),
+    0
+  );
 
   // সর্টিং লজিক
   const sortedList = [...currentList].sort((a, b) => {
-    if (sortBy === "Duration") return (b.duration || 0) - (a.duration || 0);
-    if (sortBy === "Calories") return (b.calories || 0) - (a.calories || 0);
-    if (sortBy === "Rating") return (b.rating || 0) - (a.rating || 0);
+    const durA = Number(a.duration) || 0;
+    const durB = Number(b.duration) || 0;
+    const calA = Number(a.caloriesBurned ?? a.calories) || 0;
+    const calB = Number(b.caloriesBurned ?? b.calories) || 0;
+    const ratA = Number(a.rating) || 0;
+    const ratB = Number(b.rating) || 0;
+
+    if (sortBy === "Duration") return durB - durA;
+    if (sortBy === "Calories") return calB - calA;
+    if (sortBy === "Rating") return ratB - ratA;
     return 0;
   });
 
@@ -38,31 +51,45 @@ export default function MyPlanPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* হেডার */}
       <div>
-        <h1 className="text-3xl font-black uppercase text-white tracking-wide">MY PLAN</h1>
+        <h1 className="text-3xl font-black uppercase text-white tracking-wide">
+          MY PLAN
+        </h1>
         <p className="text-xs text-gray-400 mt-1">
           Cap of five lifts for today. Finish them, then load more.
         </p>
       </div>
 
       {/* ১. ডায়নামিক মেট্রিক্স কার্ড (Top Stats) */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-[#12161f] border border-gray-800/80 rounded-2xl p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-[#12161f] border border-gray-800/80 rounded-2xl p-6 sm:p-8">
         <div>
-          <span className="text-xs font-semibold text-gray-400 block mb-1">Exercises</span>
-          <span className="text-4xl font-black text-[#ccff00]">{totalExercises}</span>
+          <span className="text-xs font-semibold text-gray-400 block mb-1">
+            Exercises
+          </span>
+          <span className="text-4xl font-black text-[#ccff00]">
+            {totalExercises}
+          </span>
         </div>
         <div>
-          <span className="text-xs font-semibold text-gray-400 block mb-1">Minutes</span>
-          <span className="text-4xl font-black text-white">{totalMinutes}</span>
+          <span className="text-xs font-semibold text-gray-400 block mb-1">
+            Minutes
+          </span>
+          <span className="text-4xl font-black text-white">
+            {totalMinutes}
+          </span>
         </div>
         <div>
-          <span className="text-xs font-semibold text-gray-400 block mb-1">Calories</span>
-          <span className="text-4xl font-black text-white">{totalCalories}</span>
+          <span className="text-xs font-semibold text-gray-400 block mb-1">
+            Calories
+          </span>
+          <span className="text-4xl font-black text-white">
+            {totalCalories}
+          </span>
         </div>
       </div>
 
       {/* ২. ট্যাব ও Sort By ড্রপডাউন */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        {/* ট্যাব */}
+        {/* ট্যাব সুইচিং */}
         <div className="bg-[#12161f] p-1 rounded-xl border border-gray-800/80 inline-flex w-fit">
           <button
             onClick={() => setActiveTab("plan")}
@@ -84,7 +111,7 @@ export default function MyPlanPage() {
           </button>
         </div>
 
-        {/* Sort By ড্রপডাউন (চ্যালেঞ্জ C1) */}
+        {/* Sort By ড্রপডাউন */}
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <span className="text-xs text-gray-400 font-medium">Sort By</span>
           <div className="relative">
@@ -123,80 +150,94 @@ export default function MyPlanPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {sortedList.map((workout) => (
-            <div
-              key={workout.id}
-              className={`bg-[#12161f] border ${workout.done ? "border-green-900/60 bg-[#121a1f]" : "border-gray-800/80"
-                } rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 transition-all`}
-            >
-              {/* লেফট সাইড: থাম্বনেইল ও ইনফো */}
-              <div className="flex items-center gap-4 w-full md:w-auto">
-                <div className="relative w-20 h-16 sm:w-24 sm:h-20 bg-[#1b212f] rounded-xl overflow-hidden flex-shrink-0">
-                  <Image
-                    src={workout.image || "/banner.png"}
-                    alt={workout.name}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                </div>
-                <div className="space-y-1">
-                  <h3 className={`font-black uppercase text-sm sm:text-base ${workout.done ? "line-through text-gray-500" : "text-white"}`}>
-                    {workout.name}
-                  </h3>
-                  <p className="text-xs text-gray-400">{workout.equipment}</p>
-                  <div className="flex items-center gap-3 text-xs text-gray-400 pt-1">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5" /> {workout.duration} min
-                    </span>
-                    <span className="flex items-center gap-1 text-orange-400">
-                      <Flame className="w-3.5 h-3.5" /> {workout.calories} kcal
-                    </span>
-                    <span className="flex items-center gap-1 text-yellow-400">
-                      <Star className="w-3.5 h-3.5 fill-yellow-400" /> {workout.rating}
-                    </span>
+          {sortedList.map((workout) => {
+            const calories = workout.caloriesBurned ?? workout.calories ?? 0;
+
+            return (
+              <div
+                key={workout.id}
+                className={`bg-[#12161f] border ${workout.done
+                    ? "border-green-800/60 bg-[#121c1f]"
+                    : "border-gray-800/80"
+                  } rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 transition-all`}
+              >
+                {/* লেফট সাইড: থাম্বনেইল ও ইনফো */}
+                <div className="flex items-center gap-4 w-full md:w-auto">
+                  <div className="relative w-20 h-16 sm:w-24 sm:h-20 bg-[#1b212f] rounded-xl overflow-hidden flex-shrink-0">
+                    <Image
+                      src={workout.image || "/banner.png"}
+                      alt={workout.name}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <h3
+                      className={`font-black uppercase text-sm sm:text-base ${workout.done
+                          ? "line-through text-gray-500"
+                          : "text-white"
+                        }`}
+                    >
+                      {workout.name}
+                    </h3>
+                    <p className="text-xs text-gray-400">{workout.equipment}</p>
+                    <div className="flex items-center gap-3 text-xs text-gray-400 pt-1">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-gray-400" />{" "}
+                        {workout.duration} min
+                      </span>
+                      <span className="flex items-center gap-1 text-gray-400">
+                        <Flame className="w-3.5 h-3.5 text-gray-400" />{" "}
+                        {calories} kcal
+                      </span>
+                      <span className="flex items-center gap-1 text-gray-400">
+                        <Star className="w-3.5 h-3.5 text-gray-400" />{" "}
+                        {workout.rating}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* রাইট সাইড: অ্যাকশন বাটনসমূহ */}
-              <div className="flex items-center gap-2 w-full md:w-auto justify-end border-t md:border-t-0 pt-3 md:pt-0 border-gray-800">
-                <Link
-                  href={`/workout/${workout.id}`}
-                  className="bg-[#1f2937] hover:bg-gray-700 text-xs font-semibold px-4 py-2 rounded-lg text-gray-200 transition-colors"
-                >
-                  View Details
-                </Link>
-
-                {/* Mark as Done বাটন (শুধু Today's Plan এর জন্য) */}
-                {activeTab === "plan" && (
-                  <button
-                    onClick={() => toggleMarkAsDone(workout.id)}
-                    className={`flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-lg transition-colors cursor-pointer ${workout.done
-                        ? "bg-green-700 text-white"
-                        : "bg-[#ccff00] text-black hover:bg-[#b8e600]"
-                      }`}
+                {/* রাইট সাইড: অ্যাকশন বাটনসমূহ */}
+                <div className="flex items-center gap-2.5 w-full md:w-auto justify-end border-t md:border-t-0 pt-3 md:pt-0 border-gray-800">
+                  <Link
+                    href={`/workout/${workout.id}`}
+                    className="bg-[#1f2937] hover:bg-gray-700 text-xs font-semibold px-4 py-2 rounded-lg text-gray-200 transition-colors"
                   >
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
-                    {workout.done ? "Done" : "Mark as Done"}
-                  </button>
-                )}
+                    View Details
+                  </Link>
 
-                {/* Remove (X) বাটন */}
-                <button
-                  onClick={() =>
-                    activeTab === "plan"
-                      ? removeFromPlan(workout.id)
-                      : removeFromSaved(workout.id)
-                  }
-                  className="p-2 text-gray-500 hover:text-red-400 transition-colors cursor-pointer"
-                  title="Remove"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                  {/* Mark as Done বাটন (শুধুমাত্র Today's Plan ট্যাবে থাকবে) */}
+                  {activeTab === "plan" && (
+                    <button
+                      onClick={() => toggleMarkAsDone(workout.id)}
+                      className={`flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-lg transition-colors cursor-pointer ${workout.done
+                          ? "bg-green-700 text-white"
+                          : "bg-[#ccff00] text-black hover:bg-[#b8e600]"
+                        }`}
+                    >
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      {workout.done ? "Done" : "Mark as Done"}
+                    </button>
+                  )}
+
+                  {/* Remove (X) বাটন */}
+                  <button
+                    onClick={() =>
+                      activeTab === "plan"
+                        ? removeFromPlan(workout.id)
+                        : removeFromSaved(workout.id)
+                    }
+                    className="p-2 text-gray-500 hover:text-red-400 transition-colors cursor-pointer"
+                    title="Remove"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
