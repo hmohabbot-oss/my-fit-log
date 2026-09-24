@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, Flame, Star, ArrowDown, ChevronRight } from "lucide-react";
+import { Clock, Flame, Star, ArrowDown } from "lucide-react";
 
 export default function HomePage() {
   const [workouts, setWorkouts] = useState([]);
@@ -89,14 +89,15 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {workouts.map((workout) => {
-              // API থেকে muscleGroups এবং caloriesBurned সঠিকভাবে ধরা হচ্ছে
               const categories = workout.muscleGroups || workout.category || [];
               const calories = workout.caloriesBurned ?? workout.calories ?? 0;
 
               return (
-                <div
+                /* পুরো কার্ডটি এখন একটি Link হিসেবে কাজ করবে */
+                <Link
                   key={workout.id}
-                  className="bg-[#141822] border border-gray-800/70 hover:border-gray-700 rounded-2xl overflow-hidden flex flex-col transition-all duration-200 group"
+                  href={`/workout/${workout.id}`}
+                  className="bg-[#141822] border border-gray-800/70 hover:border-gray-700 rounded-2xl overflow-hidden flex flex-col transition-all duration-200 group cursor-pointer block"
                 >
                   {/* ইমেজ */}
                   <div className="relative h-48 w-full bg-[#1b212f] flex items-center justify-center overflow-hidden">
@@ -112,7 +113,7 @@ export default function HomePage() {
                   {/* কার্ড কনটেন্ট */}
                   <div className="p-5 flex flex-col flex-grow justify-between space-y-4">
                     <div>
-                      {/* ক্যাটাগরি / বডি পার্টস ব্যাজ (Figma স্টাইল: নিয়ন-লাইম পিল) */}
+                      {/* ক্যাটাগরি / বডি পার্টস ব্যাজ */}
                       <div className="flex flex-wrap gap-1.5 mb-3">
                         {categories.map((cat, idx) => (
                           <span
@@ -124,7 +125,7 @@ export default function HomePage() {
                         ))}
                       </div>
 
-                      <h3 className="font-extrabold text-white text-base tracking-wide uppercase line-clamp-1">
+                      <h3 className="font-extrabold text-white text-base tracking-wide uppercase line-clamp-1 group-hover:text-[#ccff00] transition-colors">
                         {workout.name}
                       </h3>
                       <p className="text-xs text-gray-400 mt-1">
@@ -132,33 +133,23 @@ export default function HomePage() {
                       </p>
                     </div>
 
-                    {/* স্ট্যাটাস ও ডিটেইলস লিংক */}
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-800/70 text-xs text-gray-400">
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5 text-gray-400" />
-                          {workout.duration} min
-                        </span>
-                        <span className="flex items-center gap-1 text-gray-400">
-                          <Flame className="w-3.5 h-3.5 text-gray-400" />
-                          {calories} kcal
-                        </span>
-                        <span className="flex items-center gap-1 text-gray-400">
-                          <Star className="w-3.5 h-3.5 text-gray-400" />
-                          {workout.rating}
-                        </span>
-                      </div>
-
-                      <Link
-                        href={`/workout/${workout.id}`}
-                        className="text-[#ccff00] hover:underline flex items-center font-bold text-xs"
-                      >
-                        View Details
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </Link>
+                    {/* স্ট্যাটাস রো (Figma অনুযায়ী শুধুমাত্র ৩টি স্ট্যাট থাকবে, আলাদা বাটন ছাড়া) */}
+                    <div className="flex items-center gap-4 pt-3 border-t border-gray-800/70 text-xs text-gray-400">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-gray-400" />
+                        {workout.duration} min
+                      </span>
+                      <span className="flex items-center gap-1 text-gray-400">
+                        <Flame className="w-3.5 h-3.5 text-gray-400" />
+                        {calories} kcal
+                      </span>
+                      <span className="flex items-center gap-1 text-gray-400">
+                        <Star className="w-3.5 h-3.5 text-gray-400" />
+                        {workout.rating}
+                      </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

@@ -32,7 +32,7 @@ export default function WorkoutDetailsPage({ params }) {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-16 flex justify-center">
+      <div className="max-w-6xl mx-auto px-4 py-24 flex justify-center items-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ccff00]" />
       </div>
     );
@@ -41,7 +41,7 @@ export default function WorkoutDetailsPage({ params }) {
   if (!workout) {
     return (
       <div className="max-w-xl mx-auto py-20 text-center space-y-4">
-        <h2 className="text-2xl font-bold">Workout not found</h2>
+        <h2 className="text-2xl font-bold text-white">Workout not found</h2>
         <Link href="/" className="text-[#ccff00] hover:underline text-sm inline-flex items-center gap-1">
           <ArrowLeft className="w-4 h-4" /> Back to library
         </Link>
@@ -51,16 +51,18 @@ export default function WorkoutDetailsPage({ params }) {
 
   const isInPlan = todayPlan.some((item) => item.id === workout.id);
   const isSaved = savedWorkouts.some((item) => item.id === workout.id);
+  const categories = workout.muscleGroups || workout.category || [];
+  const calories = workout.caloriesBurned ?? workout.calories ?? 0;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Back to workouts
+        <ArrowLeft className="w-4 h-4" /> Back to library
       </Link>
 
       <div className="bg-[#12161f] border border-gray-800/80 rounded-3xl p-6 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* বাঁয়ের কলাম: ইমেজ */}
-        <div className="relative w-full h-80 sm:h-[450px] bg-[#1a202c] rounded-2xl overflow-hidden flex items-center justify-center">
+        {/* বাঁয়ের কলাম: বড় ইমেজ */}
+        <div className="relative w-full h-80 sm:h-[480px] bg-[#1a202c] rounded-2xl overflow-hidden flex items-center justify-center">
           <Image
             src={workout.image || "/banner.png"}
             alt={workout.name}
@@ -80,12 +82,12 @@ export default function WorkoutDetailsPage({ params }) {
               {workout.description}
             </p>
 
-            {/* ক্যাটাগরি */}
+            {/* ক্যাটাগরি / বডি পার্টস ব্যাজ (Figma স্টাইল) */}
             <div className="flex flex-wrap gap-2">
-              {workout.category?.map((cat, idx) => (
+              {categories.map((cat, idx) => (
                 <span
                   key={idx}
-                  className="bg-[#243314] text-[#ccff00] text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider"
+                  className="bg-[#ccff00] text-black text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider"
                 >
                   {cat}
                 </span>
@@ -93,23 +95,44 @@ export default function WorkoutDetailsPage({ params }) {
             </div>
 
             {/* কী-স্পেক্স টেবিল */}
-            <div className="bg-[#181d29] rounded-xl p-4 border border-gray-800/80 divide-y divide-gray-800/80 text-xs">
-              <div className="flex justify-between py-2"><span className="text-gray-400 uppercase">Equipment</span><span className="font-semibold text-white">{workout.equipment}</span></div>
-              <div className="flex justify-between py-2"><span className="text-gray-400 uppercase">Difficulty</span><span className="font-semibold text-white">{workout.difficulty || "Intermediate"}</span></div>
-              <div className="flex justify-between py-2"><span className="text-gray-400 uppercase">Sets</span><span className="font-semibold text-white">{workout.sets || 4}</span></div>
-              <div className="flex justify-between py-2"><span className="text-gray-400 uppercase">Reps</span><span className="font-semibold text-white">{workout.reps || "6-8"}</span></div>
-              <div className="flex justify-between py-2"><span className="text-gray-400 uppercase">Duration</span><span className="font-semibold text-white">{workout.duration} min</span></div>
-              <div className="flex justify-between py-2"><span className="text-gray-400 uppercase">Calories</span><span className="font-semibold text-white">{workout.calories} kcal</span></div>
-              <div className="flex justify-between py-2"><span className="text-gray-400 uppercase">Rating</span><span className="font-semibold text-white">{workout.rating}</span></div>
+            <div className="bg-[#181d29] rounded-xl p-4 border border-gray-800/80 divide-y divide-gray-800/80 text-xs mt-4">
+              <div className="flex justify-between py-2.5">
+                <span className="text-gray-400 uppercase font-medium">Equipment</span>
+                <span className="font-semibold text-white">{workout.equipment}</span>
+              </div>
+              <div className="flex justify-between py-2.5">
+                <span className="text-gray-400 uppercase font-medium">Difficulty</span>
+                <span className="font-semibold text-white">{workout.difficulty || "Intermediate"}</span>
+              </div>
+              <div className="flex justify-between py-2.5">
+                <span className="text-gray-400 uppercase font-medium">Sets</span>
+                <span className="font-semibold text-white">{workout.sets || 4}</span>
+              </div>
+              <div className="flex justify-between py-2.5">
+                <span className="text-gray-400 uppercase font-medium">Reps</span>
+                <span className="font-semibold text-white">{workout.reps || "6-8"}</span>
+              </div>
+              <div className="flex justify-between py-2.5">
+                <span className="text-gray-400 uppercase font-medium">Duration</span>
+                <span className="font-semibold text-white">{workout.duration} min</span>
+              </div>
+              <div className="flex justify-between py-2.5">
+                <span className="text-gray-400 uppercase font-medium">Calories</span>
+                <span className="font-semibold text-white">{calories} kcal</span>
+              </div>
+              <div className="flex justify-between py-2.5">
+                <span className="text-gray-400 uppercase font-medium">Rating</span>
+                <span className="font-semibold text-white">{workout.rating}</span>
+              </div>
             </div>
 
-            {/* ইনস্ট্রাকশন */}
+            {/* ইনস্ট্রাকশন সেকশন */}
             {workout.instructions && (
               <div className="space-y-2 pt-2">
                 <h3 className="text-xs font-black uppercase text-white tracking-wider">
                   Instructions
                 </h3>
-                <ol className="list-decimal list-inside space-y-1 text-xs text-gray-400">
+                <ol className="list-decimal list-inside space-y-1.5 text-xs text-gray-400 leading-relaxed">
                   {Array.isArray(workout.instructions)
                     ? workout.instructions.map((step, i) => <li key={i}>{step}</li>)
                     : <li>{workout.instructions}</li>}
@@ -124,7 +147,7 @@ export default function WorkoutDetailsPage({ params }) {
               onClick={() => addToTodayPlan(workout)}
               disabled={isInPlan}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${isInPlan
-                  ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                  ? "bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700/50"
                   : "bg-[#ccff00] text-black hover:bg-[#b8e600]"
                 }`}
             >
