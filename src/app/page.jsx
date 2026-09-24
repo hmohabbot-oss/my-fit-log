@@ -33,7 +33,7 @@ export default function HomePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
-      {/* ১. হিরো / ব্যানার সেকশন */}
+      {/* .  /   */}
       <section className="bg-[#12161f] border border-gray-800/80 rounded-3xl p-8 sm:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="max-w-xl space-y-5">
           <span className="text-xs font-bold tracking-widest text-[#ccff00] uppercase">
@@ -56,7 +56,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* ডানদিকের ব্যানার ইমেজ */}
+        {/*    */}
         <div className="w-full max-w-sm flex justify-center">
           <Image
             src="/banner.png"
@@ -69,7 +69,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ২. The Library সেকশন */}
+      {/* . The Library  */}
       <section id="library" className="space-y-6 pt-4">
         <div>
           <h2 className="text-2xl font-black uppercase text-white tracking-wider">
@@ -93,13 +93,13 @@ export default function HomePage() {
               const calories = workout.caloriesBurned ?? workout.calories ?? 0;
 
               return (
-                /* পুরো কার্ডটি এখন একটি Link হিসেবে কাজ করবে */
+                /*     Link    */
                 <Link
                   key={workout.id}
                   href={`/workout/${workout.id}`}
                   className="bg-[#141822] border border-gray-800/70 hover:border-gray-700 rounded-2xl overflow-hidden flex flex-col transition-all duration-200 group cursor-pointer block"
                 >
-                  {/* ইমেজ */}
+                  {/*  */}
                   <div className="relative h-48 w-full bg-[#1b212f] flex items-center justify-center overflow-hidden">
                     <Image
                       src={workout.image || "/banner.png"}
@@ -110,10 +110,10 @@ export default function HomePage() {
                     />
                   </div>
 
-                  {/* কার্ড কনটেন্ট */}
+                  {/*   */}
                   <div className="p-5 flex flex-col flex-grow justify-between space-y-4">
                     <div>
-                      {/* ক্যাটাগরি / বডি পার্টস ব্যাজ */}
+                      {/*  /    */}
                       <div className="flex flex-wrap gap-1.5 mb-3">
                         {categories.map((cat, idx) => (
                           <span
@@ -133,7 +133,7 @@ export default function HomePage() {
                       </p>
                     </div>
 
-                    {/* স্ট্যাটাস রো (Figma অনুযায়ী শুধুমাত্র ৩টি স্ট্যাট থাকবে, আলাদা বাটন ছাড়া) */}
+                    {/*   (Figma     ,   ) */}
                     <div className="flex items-center gap-4 pt-3 border-t border-gray-800/70 text-xs text-gray-400">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5 text-gray-400" />

@@ -13,13 +13,13 @@ export default function Navbar() {
     <header className="w-full bg-[#0d1117] border-b border-gray-800/80 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
-        {/* লোগো */}
+        {/*  */}
         <Link href="/" className="flex items-center gap-2.5">
           <Image src="/logo.png" alt="FitLog Logo" width={28} height={28} className="object-contain" priority />
           <span className="font-black text-xl tracking-wider text-white">FITLOG</span>
         </Link>
 
-        {/* মিডল নেভিগেশন লিংক */}
+        {/*    */}
         <nav className="flex items-center gap-2">
           <Link
             href="/"
@@ -41,7 +41,7 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* কাউন্টার ব্যাজ (ক্লিক করলে /my-plan এ যাবে) */}
+        {/*   (  /my-plan  ) */}
         <Link href="/my-plan" className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-300">
             <span>Plan</span>

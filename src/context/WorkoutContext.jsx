@@ -10,7 +10,7 @@ export function WorkoutProvider({ children }) {
   const [savedWorkouts, setSavedWorkouts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // LocalStorage থেকে ডেটা লোড
+  // LocalStorage   
   useEffect(() => {
     try {
       const storedPlan = localStorage.getItem("fitlog_today_plan");
@@ -24,7 +24,7 @@ export function WorkoutProvider({ children }) {
     }
   }, []);
 
-  // LocalStorage আপডেট
+  // LocalStorage 
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem("fitlog_today_plan", JSON.stringify(todayPlan));

@@ -3,7 +3,7 @@
 import { useEffect, useState, use } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, PlusCircle, Bookmark } from "lucide-react";
+import { ArrowLeft, PlusCircle, Bookmark, Check } from "lucide-react";
 import { useWorkout } from "@/context/WorkoutContext";
 
 export default function WorkoutDetailsPage({ params }) {
@@ -49,8 +49,8 @@ export default function WorkoutDetailsPage({ params }) {
     );
   }
 
-  const isInPlan = todayPlan.some((item) => item.id === workout.id);
-  const isSaved = savedWorkouts.some((item) => item.id === workout.id);
+  const isInPlan = todayPlan.some((item) => String(item.id) === String(workout.id));
+  const isSaved = savedWorkouts.some((item) => String(item.id) === String(workout.id));
   const categories = workout.muscleGroups || workout.category || [];
   const calories = workout.caloriesBurned ?? workout.calories ?? 0;
 
@@ -61,7 +61,7 @@ export default function WorkoutDetailsPage({ params }) {
       </Link>
 
       <div className="bg-[#12161f] border border-gray-800/80 rounded-3xl p-6 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* বাঁয়ের কলাম: বড় ইমেজ */}
+        {/*  :  */}
         <div className="relative w-full h-80 sm:h-[480px] bg-[#1a202c] rounded-2xl overflow-hidden flex items-center justify-center">
           <Image
             src={workout.image || "/banner.png"}
@@ -72,7 +72,7 @@ export default function WorkoutDetailsPage({ params }) {
           />
         </div>
 
-        {/* ডানের কলাম: বিবরণ ও স্পেক্স */}
+        {/*  :    */}
         <div className="flex flex-col justify-between space-y-6">
           <div className="space-y-4">
             <h1 className="text-3xl font-black uppercase text-white tracking-wide">
@@ -82,7 +82,7 @@ export default function WorkoutDetailsPage({ params }) {
               {workout.description}
             </p>
 
-            {/* ক্যাটাগরি / বডি পার্টস ব্যাজ (Figma স্টাইল) */}
+            {/*  /    */}
             <div className="flex flex-wrap gap-2">
               {categories.map((cat, idx) => (
                 <span
@@ -94,7 +94,7 @@ export default function WorkoutDetailsPage({ params }) {
               ))}
             </div>
 
-            {/* কী-স্পেক্স টেবিল */}
+            {/* -  */}
             <div className="bg-[#181d29] rounded-xl p-4 border border-gray-800/80 divide-y divide-gray-800/80 text-xs mt-4">
               <div className="flex justify-between py-2.5">
                 <span className="text-gray-400 uppercase font-medium">Equipment</span>
@@ -126,7 +126,7 @@ export default function WorkoutDetailsPage({ params }) {
               </div>
             </div>
 
-            {/* ইনস্ট্রাকশন সেকশন */}
+            {/*  */}
             {workout.instructions && (
               <div className="space-y-2 pt-2">
                 <h3 className="text-xs font-black uppercase text-white tracking-wider">
@@ -141,27 +141,28 @@ export default function WorkoutDetailsPage({ params }) {
             )}
           </div>
 
-          {/* অ্যাকশন বাটনসমূহ */}
+          {/*   */}
           <div className="flex flex-wrap items-center gap-3 pt-4">
             <button
               onClick={() => addToTodayPlan(workout)}
-              disabled={isInPlan}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${isInPlan
-                  ? "bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700/50"
-                  : "bg-[#ccff00] text-black hover:bg-[#b8e600]"
-                }`}
+              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer bg-[#ccff00] text-black hover:bg-[#b8e600] active:scale-[0.98]"
             >
-              <PlusCircle className="w-4 h-4" />
-              {isInPlan ? "In Today's Plan" : "Add to today's plan"}
+              {isInPlan ? (
+                <>
+                  <Check className="w-4 h-4 stroke-[3]" />
+                  Added to Today&apos;s Plan
+                </>
+              ) : (
+                <>
+                  <PlusCircle className="w-4 h-4" />
+                  Add to today&apos;s plan
+                </>
+              )}
             </button>
 
             <button
               onClick={() => addToSaved(workout)}
-              disabled={isSaved}
-              className={`flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-xs uppercase tracking-wider border transition-all cursor-pointer ${isSaved
-                  ? "border-gray-800 text-gray-600 cursor-not-allowed"
-                  : "border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
-                }`}
+              className="flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-xs uppercase tracking-wider border border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white active:scale-[0.98] transition-all cursor-pointer"
             >
               <Bookmark className="w-4 h-4" />
               {isSaved ? "Saved" : "Save for later"}
