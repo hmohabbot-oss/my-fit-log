@@ -43,5 +43,5 @@ The primary goal of this project is to provide a dark-themed, distraction-free i
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/your-username/fit-log.git](https://github.com/your-username/fit-log.git)
-   cd fit-log
+   git clone [https://github.com/hmohabbot-oss/my-fit-log.git]
+   cd my-fit-log
